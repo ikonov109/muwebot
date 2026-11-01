@@ -1,13 +1,3 @@
-#include "bot.hpp"
-#include <Geode/modify/PlayLayer.hpp>
-
-using namespace geode::prelude;
-
-static bool g_botEnabled = false;
-
-bool SmartBot::isEnabled() { return g_botEnabled; }
-void SmartBot::setEnabled(bool enabled) { g_botEnabled = enabled; }
-
 void SmartBot::update(PlayLayer* layer, float dt) {
     if (!g_botEnabled || !layer || !layer->m_player1) return;
     
@@ -25,9 +15,10 @@ void SmartBot::update(PlayLayer* layer, float dt) {
     bool dangerAhead = false;
     
     if (layer->m_objects) {
-        for (GameObject* obj : geode::cocos::CCArrayExt<GameObject*>(layer->m_objects)) 
-            // Пропускаем пустые объекты и те, сквозь которые можно пройти (декорации, триггеры)
+        for (GameObject* obj : geode::cocos::CCArrayExt<GameObject*>(layer->m_objects)) {
+            // Пропускаем пустые объекты и те, сквозь которые можно пройти
             if (!obj || obj->m_isPassable) continue;
+
             float objX = obj->getPositionX();
             float objY = obj->getPositionY();
 
@@ -48,10 +39,3 @@ void SmartBot::update(PlayLayer* layer, float dt) {
         player->releaseButton(PlayerButton::Jump);
     }
 }
-
-class $modify(BotPlayLayer, PlayLayer) {
-    void update(float dt) {
-        PlayLayer::update(dt);
-        SmartBot::update(this, dt);
-    }
-};

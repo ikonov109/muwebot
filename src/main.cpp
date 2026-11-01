@@ -23,9 +23,7 @@ class $modify(MyMenuLayer, MenuLayer) {
     void onToggleBot(CCObject* sender) {
         bool newState = !SmartBot::isEnabled();
         SmartBot::setEnabled(newState);
-        log::info("Bot state: {}", newState ? "ON" : "OFF");
         
-        // Меняем текст на кнопке
         auto btn = typeinfo_cast<CCMenuItemSpriteExtra*>(sender);
         if (btn) {
             if (auto spr = typeinfo_cast<ButtonSprite*>(btn->getNormalImage())) {
@@ -34,7 +32,3 @@ class $modify(MyMenuLayer, MenuLayer) {
         }
     }
 };
-
-$on_mod(Loaded) {
-    log::info("MuWe Bot loaded");
-}

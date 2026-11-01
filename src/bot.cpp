@@ -14,39 +14,18 @@ void SmartBot::update(PlayLayer* layer, float dt) {
     auto player = layer->m_player1;
     if (player->m_isDead) return;
 
-    // Работаем только если игрок на земле (для куба)
-    if (!player->m_isOnGround) return;
-
-    // Получаем координаты игрока
-    float pX = player->getPositionX();
-    float pY = player->getPositionY();
-
-    // Ищем препятствия впереди (в радиусе 100 пикселей)
-    bool dangerAhead = false;
+    // ТЕСТ: Прыгаем каждые 2 секунды, если мы на земле.
+    // Это нужно, чтобы проверить, работает ли вообще вызов прыжка.
+    static float timer = 0.0f;
+    timer += dt;
     
-    if (layer->m_objects) {
-        for (GameObject* obj : geode::cocos::CCArrayExt<GameObject*>(layer->m_objects)) {
-            // Пропускаем пустые объекты и те, сквозь которые можно пройти
-            if (!obj || obj->m_isPassable) continue;
-
-            float objX = obj->getPositionX();
-            float objY = obj->getPositionY();
-
-            // Если объект впереди нас, но не слишком далеко
-            if (objX > pX && objX < pX + 100.0f) {
-                // Если объект на уровне ног или чуть выше
-                if (objY >= pY - 15.0f && objY <= pY + 40.0f) {
-                    dangerAhead = true;
-                    break;
-                }
-            }
+    if (timer > 2.0f) {
+        timer = 0.0f;
+        if (player->m_isOnGround) {
+            player->pushButton(PlayerButton::Jump);
+            player->releaseButton(PlayerButton::Jump);
+            log::info("TEST JUMP!");
         }
-    }
-
-    // Если впереди опасность — прыгаем
-    if (dangerAhead) {
-        player->pushButton(PlayerButton::Jump);
-        player->releaseButton(PlayerButton::Jump);
     }
 }
 

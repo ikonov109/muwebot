@@ -7,7 +7,6 @@ static bool g_botEnabled = false;
 
 bool SmartBot::isEnabled() { return g_botEnabled; }
 void SmartBot::setEnabled(bool enabled) { g_botEnabled = enabled; }
-void SmartBot::reset() { /* сброс */ }
 
 void SmartBot::update(PlayLayer* layer, float dt) {
     if (!g_botEnabled || !layer || !layer->m_player1) return;

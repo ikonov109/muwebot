@@ -25,9 +25,9 @@ void SmartBot::update(PlayLayer* layer, float dt) {
     bool dangerAhead = false;
     
     if (layer->m_objects) {
-        for (GameObject* obj : geode::cocos::CCArrayExt<GameObject*>(layer->m_objects)) {
-            if (!obj || !obj->m_isSolid) continue; // Ищем только твердые блоки/шипы
-
+        for (GameObject* obj : geode::cocos::CCArrayExt<GameObject*>(layer->m_objects)) 
+            // Пропускаем пустые объекты и те, сквозь которые можно пройти (декорации, триггеры)
+            if (!obj || obj->m_isPassable) continue;
             float objX = obj->getPositionX();
             float objY = obj->getPositionY();
 
